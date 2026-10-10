@@ -43,3 +43,5 @@ CREATE TABLE IF NOT EXISTS notices (
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (created_by) REFERENCES users(id)
 );
+CREATE INDEX IF NOT EXISTS idx_email_otps_college_email
+ON email_otps (college_email);
