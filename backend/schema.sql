@@ -45,3 +45,8 @@ CREATE TABLE IF NOT EXISTS notices (
 );
 CREATE INDEX IF NOT EXISTS idx_email_otps_college_email
 ON email_otps (college_email);
+CREATE TABLE IF NOT EXISTS verified_emails (
+    college_email TEXT PRIMARY KEY,
+    verified_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    expires_at DATETIME NOT NULL
+);
