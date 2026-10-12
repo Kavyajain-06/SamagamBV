@@ -4,6 +4,7 @@ const crypto = require('crypto');
 const db = require('./database');
 const bcrypt = require('bcryptjs');
 const authenticateToken = require('./authMiddleware');
+const emailjs = require('@emailjs/nodejs');
 
 const router = express.Router();
 
@@ -23,7 +24,8 @@ function hashOtp(otp) {
         .digest('hex');
 }
 
-router.post('/signup/request-otp', (req, res) => {
+
+router.post('/signup/request-otp', async (req, res) => {
     try {
         const email = String(req.body.email || '')
             .trim()
@@ -32,81 +34,106 @@ router.post('/signup/request-otp', (req, res) => {
         if (!/^[^\s@]+@banasthali\.in$/i.test(email)) {
             return res.status(400).json({
                 status: 'error',
-                message: 'Please use a valid @banasthali.in email.'
+                message: 'Please use your Banasthali email address.'
             });
         }
 
-        // Allow development OTP testing only when explicitly enabled.
-        if (process.env.OTP_DEV_MODE !== 'true') {
-            return res.status(503).json({
-                status: 'error',
-                message: 'Email delivery is not configured yet.'
-            });
-        }
-
-        const recentOtp = db.prepare(`
-            SELECT id
+        const existingOtp = db.prepare(`
+            SELECT created_at
             FROM email_otps
             WHERE college_email = ?
-              AND created_at > datetime(
-                  'now',
-                  '-${RESEND_COOLDOWN_SECONDS} seconds'
-              )
-            ORDER BY id DESC
-            LIMIT 1
         `).get(email);
 
-        if (recentOtp) {
-            return res.status(429).json({
-                status: 'error',
-                message: 'Please wait 60 seconds before requesting another OTP.'
-            });
+        if (existingOtp) {
+            const elapsedSeconds =
+                (Date.now() - new Date(existingOtp.created_at).getTime()) / 1000;
+
+            if (elapsedSeconds < RESEND_COOLDOWN_SECONDS) {
+                return res.status(429).json({
+                    status: 'error',
+                    message: 'Please wait before requesting another OTP.'
+                });
+            }
         }
 
         const otp = crypto.randomInt(100000, 1000000).toString();
         const otpHash = hashOtp(otp);
 
-        const createOtp = db.transaction(() => {
-            // Remove older OTPs for this email.
+        const expiresAt = new Date(
+            Date.now() + OTP_EXPIRY_MINUTES * 60 * 1000
+        ).toISOString();
+
+        const createdAt = new Date().toISOString();
+
+        // Remove any previous OTP for this college email.
+        db.prepare(`
+            DELETE FROM email_otps
+            WHERE college_email = ?
+        `).run(email);
+
+        // Store the hashed OTP.
+        const result = db.prepare(`
+            INSERT INTO email_otps (
+                college_email,
+                otp_hash,
+                expires_at,
+                created_at
+            )
+            VALUES (?, ?, ?, ?)
+        `).run(email, otpHash, expiresAt, createdAt);
+
+        const otpRecordId = result.lastInsertRowid;
+
+        try {
+            await emailjs.send(
+                process.env.EMAILJS_SERVICE_ID,
+                process.env.EMAILJS_TEMPLATE_ID,
+                {
+                    to_email: email,
+                    to_name: 'Samagam student',
+                    otp: otp
+                },
+                {
+                    publicKey: process.env.EMAILJS_PUBLIC_KEY,
+                    privateKey: process.env.EMAILJS_PRIVATE_KEY
+                }
+            );
+        } catch (emailError) {
+            // Remove the OTP created by this request if delivery fails.
             db.prepare(`
                 DELETE FROM email_otps
-                WHERE college_email = ?
-            `).run(email);
+                WHERE id = ? AND college_email = ?
+            `).run(otpRecordId, email);
 
-            db.prepare(`
-                INSERT INTO email_otps (
-                    college_email,
-                    otp_hash,
-                    expires_at,
-                    attempts
-                )
-                VALUES (
-                    ?,
-                    ?,
-                    datetime('now', '+${OTP_EXPIRY_MINUTES} minutes'),
-                    0
-                )
-            `).run(email, otpHash);
-        });
+            console.error('EmailJS delivery failed:', emailError);
 
-        createOtp();
+            return res.status(502).json({
+                status: 'error',
+                message: 'Unable to send the verification email. Please try again later.'
+            });
+        }
 
-        // Development only: never enable this mode in production.
-        console.log(`[DEV ONLY] OTP for ${email}: ${otp}`);
+        if (process.env.OTP_DEV_MODE === 'true') {
+            console.log(`[DEV ONLY] OTP for ${email}: ${otp}`);
+        }
 
-        return res.json({
+        return res.status(200).json({
             status: 'success',
-            message: 'OTP generated for development testing.'
+            message: 'Verification OTP sent to your email.'
         });
+
     } catch (error) {
-        console.error('OTP request failed:', error.message);
+        console.error('OTP request failed:', error);
 
         return res.status(500).json({
             status: 'error',
-            message: 'Unable to process the OTP request.'
+            message: 'Something went wrong while requesting the OTP.'
         });
     }
 });
+
+
+
 router.post('/signup/verify-otp', (req, res) => {
     try {
         const email = String(req.body.email || '')
