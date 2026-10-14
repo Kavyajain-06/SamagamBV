@@ -9,7 +9,12 @@ const authRoutes = require('./auth');
 const app = express();
 const PORT = process.env.PORT || 5000;
 
-app.use(cors());
+app.use(cors({
+    origin: 'https://miniature-pancake-4jv5x97564r9cv4v-5173.app.github.dev',
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization']
+}));
+
 app.use(express.json());
 
 // Basic routes

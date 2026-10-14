@@ -4,7 +4,7 @@ CREATE TABLE IF NOT EXISTS users (
     college_email TEXT NOT NULL UNIQUE,
     password_hash TEXT NOT NULL,
     role TEXT NOT NULL DEFAULT 'student'
-        CHECK (role IN ('student', 'admin')),
+        CHECK (role IN ('student', 'admin', 'club_morderator')),
     email_verified INTEGER NOT NULL DEFAULT 0
         CHECK (email_verified IN (0, 1)),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
