@@ -4,12 +4,20 @@ CREATE TABLE IF NOT EXISTS users (
     college_email TEXT NOT NULL UNIQUE,
     password_hash TEXT NOT NULL,
     role TEXT NOT NULL DEFAULT 'student'
-        CHECK (role IN ('student', 'admin', 'club_morderator')),
+        CHECK (role IN ('student', 'admin', 'club_moderator')),
     email_verified INTEGER NOT NULL DEFAULT 0
         CHECK (email_verified IN (0, 1)),
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP
 );
-
+CREATE TABLE IF NOT EXISTS user_profiles (
+    user_id INTEGER PRIMARY KEY,
+    department TEXT NOT NULL,
+    year_of_study TEXT NOT NULL,
+    created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
+        ON DELETE CASCADE
+);
 CREATE TABLE IF NOT EXISTS email_otps (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     college_email TEXT NOT NULL,
@@ -23,6 +31,43 @@ CREATE TABLE IF NOT EXISTS skill_tags (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     name TEXT NOT NULL UNIQUE
 );
+INSERT OR IGNORE INTO skill_tags (name) VALUES
+    ('C'),
+    ('C++'),
+    ('Java'),
+    ('Python'),
+    ('JavaScript'),
+    ('TypeScript'),
+    ('HTML & CSS'),
+    ('React'),
+    ('Node.js'),
+    ('SQL'),
+    ('Data Structures & Algorithms'),
+    ('Git & GitHub'),
+    ('Web Development'),
+    ('App Development'),
+    ('AI & Machine Learning'),
+    ('Data Science'),
+    ('Cybersecurity'),
+    ('UI/UX Design'),
+    ('Graphic Design'),
+    ('Video Editing'),
+    ('Photography'),
+    ('Content Writing'),
+    ('Public Speaking'),
+    ('Communication'),
+    ('Interview Preparation'),
+    ('Resume Building'),
+    ('Aptitude'),
+    ('Leadership'),
+    ('Chess'),
+    ('Photography'),
+    ('Guitar'),
+    ('Singing'),
+    ('Dance'),
+    ('Fitness'),
+    ('Sports'),
+    ('Cooking');
 
 CREATE TABLE IF NOT EXISTS user_skills (
     id INTEGER PRIMARY KEY AUTOINCREMENT,

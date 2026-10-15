@@ -1,0 +1,199 @@
+
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&display=swap');
+
+.profile-page {
+  min-height: 100vh;
+  padding: 32px 7%;
+  background: #f7f5ef;
+  color: #171717;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.profile-topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1100px;
+  margin: 0 auto 48px;
+}
+
+.profile-logo {
+  color: #171717;
+  font-size: 25px;
+  font-weight: 700;
+  letter-spacing: -1.5px;
+  text-decoration: none;
+}
+
+.profile-logo span {
+  color: #ff5c35;
+}
+
+.profile-step {
+  padding: 8px 12px;
+  border: 2px solid #171717;
+  background: #d9ff66;
+  box-shadow: 3px 3px 0 #171717;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.profile-card {
+  max-width: 850px;
+  margin: 0 auto 50px;
+  padding: clamp(24px, 5vw, 56px);
+  border: 2px solid #171717;
+  background: #fffdf8;
+  box-shadow: 8px 8px 0 #171717;
+}
+
+.profile-eyebrow {
+  margin: 0 0 18px;
+  color: #f05230;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 2px;
+}
+
+.profile-card h1 {
+  margin: 0;
+  font-size: clamp(42px, 7vw, 76px);
+  font-weight: 700;
+  letter-spacing: -4px;
+  line-height: 0.98;
+}
+
+.profile-card h1 span {
+  color: #f05230;
+}
+
+.profile-intro {
+  max-width: 580px;
+  margin: 24px 0 38px;
+  color: #555;
+  font-size: 15px;
+  line-height: 1.7;
+}
+
+.profile-field {
+  margin-bottom: 34px;
+}
+
+.profile-field label {
+  display: block;
+  margin-bottom: 14px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+
+.profile-field select {
+  width: 100%;
+  padding: 15px;
+  border: 2px solid #171717;
+  border-radius: 0;
+  background: #fff;
+  color: #171717;
+  font: inherit;
+  outline-offset: 3px;
+}
+
+.year-options,
+.skill-options {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.year-chip,
+.skill-chip {
+  padding: 10px 14px;
+  border: 2px solid #171717;
+  border-radius: 0;
+  background: #fffdf8;
+  color: #171717;
+  font-family: inherit;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 150ms ease, transform 150ms ease,
+    box-shadow 150ms ease;
+}
+
+.year-chip:hover,
+.skill-chip:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 3px 3px 0 #171717;
+}
+
+.year-chip.selected,
+.skill-chip.selected {
+  background: #d9ff66;
+  box-shadow: 3px 3px 0 #171717;
+}
+
+.profile-hint {
+  margin: -5px 0 15px;
+  color: #666;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.profile-error {
+  padding: 12px 14px;
+  border: 2px solid #b42318;
+  background: #fff0ee;
+  color: #b42318;
+  font-size: 13px;
+  font-weight: 600;
+}
+
+.profile-submit {
+  width: 100%;
+  padding: 18px;
+  border: 2px solid #171717;
+  border-radius: 0;
+  background: #ff5c35;
+  color: #171717;
+  box-shadow: 5px 5px 0 #171717;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  cursor: pointer;
+  transition: transform 150ms ease, box-shadow 150ms ease;
+}
+
+.profile-submit:hover:not(:disabled) {
+  transform: translate(3px, 3px);
+  box-shadow: 2px 2px 0 #171717;
+}
+
+.profile-submit:disabled {
+  cursor: wait;
+  opacity: 0.7;
+}
+
+@media (max-width: 600px) {
+  .profile-page {
+    padding: 22px 18px;
+  }
+
+  .profile-topbar {
+    margin-bottom: 32px;
+  }
+
+  .profile-card {
+    box-shadow: 5px 5px 0 #171717;
+  }
+
+  .profile-card h1 {
+    letter-spacing: -2px;
+  }
+
+  .profile-submit {
+    padding: 15px 10px;
+    font-size: 12px;
+  }
+}

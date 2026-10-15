@@ -1,0 +1,855 @@
+@import url('https://fonts.googleapis.com/css2?family=Hanken+Grotesk:wght@400;500;600;700&family=Space+Grotesk:wght@500;600;700&display=swap');
+
+:root {
+  --account-ink: #10264f;
+  --account-blue: #1762f5;
+  --account-blue-pale: #dbe7ff;
+  --account-green: #adf34e;
+  --account-green-dark: #416900;
+  --account-lilac: #f0f2ff;
+  --account-border: #cbd4e8;
+  --account-muted: #657493;
+  --account-shadow: 5px 5px 0 #10264f;
+}
+
+.create-account-page {
+  min-height: 100vh;
+  padding: 24px;
+  color: var(--account-ink);
+  background:
+    radial-gradient(ellipse at 75% 20%, rgba(221, 228, 255, .62), transparent 42%),
+    #f0f2ff;
+  font-family: 'Hanken Grotesk', sans-serif;
+}
+
+.create-account-shell {
+  width: min(1240px, 100%);
+  margin: 0 auto;
+}
+
+.samagam-wordmark {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  margin: 0 0 30px 6px;
+  color: var(--account-ink);
+  font: 700 22px/1 'Space Grotesk', sans-serif;
+  text-decoration: none;
+}
+
+.samagam-mark {
+  color: var(--account-blue);
+  font-size: 32px;
+  line-height: .8;
+}
+
+.create-account-grid {
+  display: grid;
+  grid-template-columns: minmax(0, 1.2fr) minmax(340px, .8fr);
+  align-items: start;
+  gap: 34px;
+}
+
+.account-form-column {
+  min-width: 0;
+}
+
+.account-heading {
+  position: relative;
+  margin: 0 0 18px 10px;
+}
+
+.account-heading h1 {
+  margin: 0;
+  font: 700 clamp(38px, 4.2vw, 58px)/.98 'Space Grotesk', sans-serif;
+  letter-spacing: -.055em;
+}
+
+.account-heading h1 span {
+  color: var(--account-blue);
+}
+
+.heading-sticker {
+  position: absolute;
+  top: 5px;
+  right: 16px;
+  padding: 6px 9px;
+  background: #ffdbce;
+  color: #973400;
+  box-shadow: 2px 2px 0 #10264f;
+  font: 600 12px/1.2 'Space Grotesk', sans-serif;
+  transform: rotate(5deg);
+}
+
+.account-form-card {
+  position: relative;
+  overflow: hidden;
+  padding: 30px 30px 25px;
+  border: 1px solid #b8c5df;
+  background: rgba(255, 255, 255, .93);
+  box-shadow: var(--account-shadow);
+}
+
+.account-card-ribbon {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 7px;
+  background: var(--account-blue);
+}
+
+.signup-progress {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 5px;
+  margin: 0 0 28px;
+}
+
+.progress-step {
+  display: flex;
+  min-width: 65px;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: #7b87a2;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  white-space: nowrap;
+}
+
+.progress-dot {
+  display: grid;
+  width: 27px;
+  height: 27px;
+  place-items: center;
+  border-radius: 50%;
+  background: #edf0f7;
+  color: #687795;
+  font-size: 12px;
+}
+
+.progress-step.complete,
+.progress-step.current {
+  color: var(--account-ink);
+}
+
+.progress-step.complete .progress-dot,
+.progress-step.current .progress-dot {
+  background: var(--account-blue);
+  color: white;
+  box-shadow: 0 0 0 3px #e6edff;
+}
+
+.progress-line {
+  height: 2px;
+  flex: 1;
+  margin-top: 13px;
+  background: #cbd2e0;
+}
+
+.progress-line.active {
+  background: var(--account-blue);
+}
+
+.create-account-form {
+  display: flex;
+  flex-direction: column;
+  gap: 19px;
+}
+
+.account-field {
+  display: flex;
+  min-width: 0;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.account-field label,
+.selector-field legend {
+  color: #24395f;
+  font: 700 11px/1.4 'Space Grotesk', sans-serif;
+  letter-spacing: .075em;
+  text-transform: uppercase;
+}
+
+.account-field input:not([type='checkbox']) {
+  width: 100%;
+  min-height: 43px;
+  box-sizing: border-box;
+  border: 1px solid var(--account-border);
+  border-radius: 6px;
+  padding: 11px 14px;
+  outline: none;
+  background: #fff;
+  color: var(--account-ink);
+  font: 400 14px/1.4 'Hanken Grotesk', sans-serif;
+  transition: border-color .18s, box-shadow .18s;
+}
+
+.account-field input:not([type='checkbox'])::placeholder {
+  color: #8190ad;
+}
+
+.account-field input:not([type='checkbox']):focus {
+  border-color: var(--account-blue);
+  box-shadow: 0 0 0 3px rgba(23, 98, 245, .12);
+}
+
+.account-field input[readonly] {
+  background: #f8faff;
+  color: #667795;
+}
+
+.field-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+
+.domain-lock {
+  border-radius: 20px;
+  padding: 4px 9px;
+  background: var(--account-blue-pale);
+  color: #0755e7;
+  font: 700 10px/1.3 'Space Grotesk', sans-serif;
+  white-space: nowrap;
+}
+
+.verified-note {
+  margin-top: -3px;
+  color: #416900;
+  font-size: 11px;
+}
+
+.password-input-wrap {
+  position: relative;
+}
+
+.password-input-wrap input {
+  padding-right: 58px !important;
+}
+
+.password-toggle {
+  position: absolute;
+  top: 50%;
+  right: 10px;
+  border: 0;
+  padding: 5px;
+  background: transparent;
+  color: #435578;
+  cursor: pointer;
+  font: 700 11px 'Hanken Grotesk', sans-serif;
+  transform: translateY(-50%);
+}
+
+.password-meter {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  padding: 15px 16px;
+  background: #f1f3ff;
+}
+
+.meter-heading {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  color: #566787;
+  font: 700 10px 'Space Grotesk', sans-serif;
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+.strength-1 { color: #ba1a1a; }
+.strength-2 { color: #973400; }
+.strength-3 { color: #416900; }
+
+.meter-bars {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 6px;
+}
+
+.meter-bars span {
+  height: 8px;
+  border-radius: 10px;
+  background: #d9dfef;
+}
+
+.meter-bars span.meter-fill-1 { background: #df5d5d; }
+.meter-bars span.meter-fill-2 { background: #f0b83f; }
+.meter-bars span.meter-fill-3 { background: #83d52e; }
+
+.password-rules {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  color: #526483;
+  font-size: 11px;
+}
+
+.password-rules span {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.password-rules i {
+  width: 15px;
+  color: #8995ad;
+  font-size: 15px;
+  font-style: normal;
+}
+
+.password-rules .rule-met,
+.password-rules .rule-met i {
+  color: var(--account-green-dark);
+}
+
+.selector-field {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 0;
+  border: 0;
+  padding: 0;
+}
+
+.selector-field legend {
+  margin-bottom: 0;
+  padding: 0;
+}
+
+.choice-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.choice-pill {
+  min-width: 60px;
+  border: 1px solid var(--account-border);
+  border-radius: 6px;
+  padding: 8px 13px;
+  background: #fff;
+  color: #314568;
+  cursor: pointer;
+  font: 500 12px/1.2 'Hanken Grotesk', sans-serif;
+  transition: background .15s, transform .15s, box-shadow .15s;
+}
+
+.choice-pill:hover {
+  transform: translateY(-1px);
+}
+
+.choice-pill.selected {
+  border-color: #10264f;
+  background: var(--account-green);
+  color: #10264f;
+  box-shadow: 2px 2px 0 #10264f;
+  font-weight: 700;
+}
+
+.year-choices .choice-pill {
+  min-width: 95px;
+}
+
+.honor-agreement {
+  display: flex;
+  align-items: flex-start;
+  gap: 11px;
+  color: #24395f;
+  font-size: 12px;
+  line-height: 1.55;
+  cursor: pointer;
+}
+
+.honor-agreement input {
+  width: 16px;
+  height: 16px;
+  flex: 0 0 16px;
+  margin: 2px 0 0;
+  accent-color: var(--account-blue);
+  cursor: pointer;
+}
+
+.honor-agreement strong {
+  color: var(--account-blue);
+}
+
+.account-message {
+  margin: -8px 0 0;
+  color: #a02b2b;
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.create-account-submit {
+  display: flex;
+  min-height: 47px;
+  align-items: center;
+  justify-content: center;
+  gap: 16px;
+  border: 1px solid #10264f;
+  border-radius: 6px;
+  padding: 12px 18px;
+  background: var(--account-green);
+  box-shadow: 4px 4px 0 #10264f;
+  color: #10264f;
+  cursor: pointer;
+  font: 700 13px 'Space Grotesk', sans-serif;
+  letter-spacing: .02em;
+  text-transform: uppercase;
+  transition: transform .15s, box-shadow .15s;
+}
+
+.create-account-submit:hover {
+  box-shadow: 1px 1px 0 #10264f;
+  transform: translate(3px, 3px);
+}
+
+.create-account-submit span:last-child {
+  font-size: 22px;
+  line-height: 1;
+}
+
+.account-signin {
+  margin: 3px 0 0;
+  text-align: center;
+  color: #24395f;
+  font-size: 12px;
+}
+
+.account-signin a {
+  color: var(--account-blue);
+  font-weight: 700;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.campus-showcase {
+  display: flex;
+  flex-direction: column;
+  gap: 23px;
+  padding-top: 105px;
+}
+
+.showcase-card {
+  position: relative;
+  display: flex;
+  min-height: 176px;
+  align-items: center;
+  justify-content: space-between;
+  gap: 15px;
+  overflow: hidden;
+  border: 1px solid #aabfe8;
+  border-radius: 8px;
+  padding: 20px;
+  background: #eef3ff;
+  box-shadow: var(--account-shadow);
+}
+
+.showcase-card::after {
+  position: absolute;
+  right: 18px;
+  top: 14px;
+  color: var(--account-ink);
+  content: '✦';
+  font-size: 16px;
+  transform: rotate(20deg);
+}
+
+.people-card {
+  border-color: #c1d7b4;
+  background: #f0fbe9;
+}
+
+.lifestyle-card {
+  border-color: #c9baf7;
+  background: #f4f0ff;
+}
+
+.showcase-copy {
+  position: relative;
+  z-index: 1;
+  max-width: 62%;
+}
+
+.showcase-tag {
+  display: inline-block;
+  margin-bottom: 13px;
+  border: 1px solid transparent;
+  border-radius: 20px;
+  padding: 5px 10px;
+  font: 700 10px 'Space Grotesk', sans-serif;
+  text-transform: uppercase;
+}
+
+.blue-tag { border-color: #8aafff; background: #d8e5ff; color: #0755e7; }
+.green-tag { border-color: #9ddd5b; background: #b8f26a; color: #10264f; }
+.purple-tag { border-color: #c1a0ff; background: #e4d4ff; color: #7138d8; }
+
+.showcase-card h2 {
+  margin: 0 0 9px;
+  color: var(--account-ink);
+  font: 700 20px/1.2 'Space Grotesk', sans-serif;
+  letter-spacing: -.025em;
+}
+
+.showcase-card p {
+  margin: 0;
+  color: #24395f;
+  font-size: 13px;
+  line-height: 1.55;
+}
+
+.student-pass-illustration {
+  position: relative;
+  width: 122px;
+  height: 84px;
+  flex: 0 0 122px;
+  border: 3px solid #10264f;
+  border-radius: 12px;
+  background: white;
+  box-shadow: 0 5px 0 #1762f5;
+  transform: rotate(8deg);
+}
+
+.pass-topline {
+  height: 13px;
+  border-radius: 7px 7px 0 0;
+  background: #1762f5;
+}
+
+.pass-avatar {
+  position: absolute;
+  top: 25px;
+  left: 12px;
+  display: grid;
+  width: 27px;
+  height: 27px;
+  place-items: center;
+  border: 2px solid #10264f;
+  border-radius: 50%;
+  background: #a9d1ff;
+  color: #1762f5;
+}
+
+.pass-lines {
+  position: absolute;
+  top: 28px;
+  left: 49px;
+  display: flex;
+  width: 51px;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.pass-lines i {
+  height: 4px;
+  border-radius: 4px;
+  background: #b9c9e9;
+}
+
+.pass-lines i:nth-child(2) { width: 75%; }
+.pass-lines i:nth-child(3) { width: 55%; }
+
+.pass-qr {
+  position: absolute;
+  right: 10px;
+  bottom: 7px;
+  color: #10264f;
+  font-size: 20px;
+}
+
+.people-illustration {
+  position: relative;
+  display: flex;
+  width: 125px;
+  height: 100px;
+  flex: 0 0 125px;
+  align-items: center;
+  justify-content: center;
+}
+
+.person {
+  position: absolute;
+  display: grid;
+  width: 57px;
+  height: 57px;
+  place-items: center;
+  border: 3px solid #10264f;
+  border-radius: 50%;
+  background: #438cff;
+  box-shadow: 0 3px 0 #10264f;
+}
+
+.person i {
+  width: 17px;
+  height: 17px;
+  border: 2px solid #10264f;
+  border-radius: 50%;
+  background: #cfe2ff;
+}
+
+.person::after {
+  position: absolute;
+  bottom: 7px;
+  width: 30px;
+  height: 14px;
+  border: 2px solid #10264f;
+  border-radius: 18px 18px 10px 10px;
+  background: #cfe2ff;
+  content: '';
+}
+
+.person-blue { left: 4px; z-index: 1; }
+.person-green { right: 2px; background: #b5f25d; }
+.person-green i, .person-green::after { background: #e6ffc6; }
+.people-illustration b {
+  position: absolute;
+  top: 1px;
+  right: 4px;
+  color: #10264f;
+  font-size: 17px;
+}
+
+.calendar-illustration {
+  position: relative;
+  width: 91px;
+  height: 87px;
+  flex: 0 0 91px;
+  transform: rotate(5deg);
+}
+
+.calendar-page {
+  display: grid;
+  width: 82px;
+  height: 72px;
+  place-items: center;
+  border: 3px solid #10264f;
+  border-radius: 10px;
+  background: #bca0ff;
+  box-shadow: 0 5px 0 #7138d8;
+  color: #1762f5;
+  font-size: 35px;
+  text-shadow: 1px 2px 0 #10264f;
+}
+
+.calendar-rings {
+  position: absolute;
+  top: -6px;
+  left: 20px;
+  z-index: 1;
+  display: flex;
+  gap: 29px;
+}
+
+.calendar-rings i {
+  width: 6px;
+  height: 16px;
+  border: 2px solid #10264f;
+  border-radius: 4px;
+  background: #bca0ff;
+}
+
+.campus-stickers {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  gap: 8px;
+  padding: 6px 0 0;
+}
+
+.campus-stickers > span {
+  color: #10264f;
+  filter: drop-shadow(2px 3px 0 #10264f);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+}
+
+.sticker-star, .sticker-burst {
+  color: #aef34e !important;
+  font-size: 44px;
+  -webkit-text-stroke: 1px #10264f;
+}
+
+.sticker-burst {
+  color: #1762f5 !important;
+}
+
+.sticker-spark {
+  color: #9064ff !important;
+  font-size: 42px;
+}
+
+.sticker-oval {
+  border: 2px solid #10264f;
+  border-radius: 50%;
+  padding: 10px 15px;
+  box-shadow: 2px 3px 0 #10264f;
+  font-size: 12px;
+  transform: rotate(-13deg);
+}
+
+.sticker-learn {
+  background: #1762f5;
+  color: white !important;
+}
+
+.sticker-connect {
+  background: #aef34e;
+  transform: rotate(-13deg);
+}
+
+@media (max-width: 1000px) {
+  .create-account-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 34px;
+  }
+
+  .campus-showcase {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding-top: 0;
+  }
+
+  .showcase-card {
+    min-height: 170px;
+  }
+
+  .lifestyle-card {
+    grid-column: 1 / -1;
+  }
+
+  .campus-stickers {
+    grid-column: 1 / -1;
+  }
+}
+
+@media (max-width: 600px) {
+  .create-account-page {
+    padding: 18px 14px 28px;
+  }
+
+  .samagam-wordmark {
+    margin-bottom: 25px;
+  }
+
+  .account-heading {
+    margin-left: 2px;
+  }
+
+  .account-heading h1 {
+    font-size: clamp(36px, 10vw, 48px);
+  }
+
+  .heading-sticker {
+    position: static;
+    display: inline-block;
+    margin-top: 13px;
+  }
+
+  .account-form-card {
+    padding: 27px 16px 20px;
+  }
+
+  .signup-progress {
+    gap: 3px;
+    margin-bottom: 24px;
+  }
+
+  .progress-step {
+    min-width: 0;
+    flex: 1;
+    font-size: 9px;
+    white-space: normal;
+  }
+
+  .progress-line {
+    min-width: 7px;
+  }
+
+  .field-label-row {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .campus-showcase {
+    display: flex;
+    gap: 18px;
+  }
+
+  .showcase-card {
+    min-height: 155px;
+    padding: 16px;
+  }
+
+  .showcase-copy {
+    max-width: 62%;
+  }
+
+  .showcase-card h2 {
+    font-size: 17px;
+  }
+
+  .showcase-card p {
+    font-size: 12px;
+  }
+
+  .student-pass-illustration {
+    width: 95px;
+    height: 73px;
+    flex-basis: 95px;
+    transform: scale(.82) rotate(8deg);
+    margin-right: -8px;
+  }
+
+  .people-illustration {
+    width: 95px;
+    flex-basis: 95px;
+    transform: scale(.8);
+    margin-right: -10px;
+  }
+
+  .calendar-illustration {
+    transform: scale(.8) rotate(5deg);
+    margin-right: -10px;
+  }
+
+  .campus-stickers {
+    gap: 5px;
+  }
+
+  .sticker-oval {
+    padding: 8px 10px;
+    font-size: 10px;
+  }
+
+  .sticker-star, .sticker-burst {
+    font-size: 32px;
+  }
+
+  .sticker-spark {
+    font-size: 30px;
+  }
+}
+
+.profile-field-hint {
+  margin: 0 0 12px;
+  color: #666;
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.skill-choices {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+

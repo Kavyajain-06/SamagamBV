@@ -5,6 +5,7 @@ const db = require('./database');
 const bcrypt = require('bcryptjs');
 const authenticateToken = require('./authMiddleware');
 const emailjs = require('@emailjs/nodejs');
+const jwt = require('jsonwebtoken');
 
 const router = express.Router();
 
@@ -333,10 +334,19 @@ router.post('/signup', async (req, res) => {
         });
 
         const userId = createUser();
+        const profileToken = jwt.sign(
+    {
+        id: userId,
+        purpose: 'profile_setup'
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: '15m' }
+);
 
         return res.status(201).json({
             status: 'success',
-            message: 'Account created successfully.',
+            message: 'Account created successfully.Complete your profile next.',
+            profileToken,
             user: {
                 id: userId,
                 name,
@@ -475,6 +485,134 @@ router.get('/me', authenticateToken, (req, res) => {
         return res.status(500).json({
             status: 'error',
             message: 'Unable to fetch user details.'
+        });
+    }
+});
+
+/* GET available skills for profile setup */
+router.get('/profile/skills', authenticateToken, (req, res) => {
+    if (req.user.purpose !== 'profile_setup') {
+        return res.status(403).json({
+            status: 'error',
+            message: 'A profile setup token is required.'
+        });
+    }
+
+    try {
+        const skills = db.prepare(
+            'SELECT id, name FROM skill_tags ORDER BY name'
+        ).all();
+
+        return res.json({
+            status: 'success',
+            skills
+        });
+    } catch (error) {
+        console.error('Fetch skills error:', error);
+        return res.status(500).json({
+            status: 'error',
+            message: 'Could not fetch skills.'
+        });
+    }
+});
+
+
+/* SAVE completed profile */
+router.post('/profile/complete', authenticateToken, (req, res) => {
+    if (req.user.purpose !== 'profile_setup') {
+        return res.status(403).json({
+            status: 'error',
+            message: 'A profile setup token is required.'
+        });
+    }
+
+    const { department, yearOfStudy, offeringSkills, seekingSkills } = req.body;
+
+    if (
+        typeof department !== 'string' ||
+        !department.trim() ||
+        typeof yearOfStudy !== 'string' ||
+        !yearOfStudy.trim() ||
+        !Array.isArray(offeringSkills) ||
+        !Array.isArray(seekingSkills)
+    ) {
+        return res.status(400).json({
+            status: 'error',
+            message: 'Please provide your department, year of study, and skill selections.'
+        });
+    }
+
+    const userId = req.user.id;
+
+    try {
+        const existingProfile = db.prepare(
+            'SELECT user_id FROM user_profiles WHERE user_id = ?'
+        ).get(userId);
+
+        if (existingProfile) {
+            return res.status(409).json({
+                status: 'error',
+                message: 'Your profile has already been completed.'
+            });
+        }
+
+        const allSkills = [...new Set([...offeringSkills, ...seekingSkills])];
+
+        if (
+            allSkills.some(id => !Number.isInteger(id) || id <= 0)
+        ) {
+            return res.status(400).json({
+                status: 'error',
+                message: 'Invalid skill selection.'
+            });
+        }
+
+        const validSkills = allSkills.length
+            ? db.prepare(
+                `SELECT id FROM skill_tags
+                 WHERE id IN (${allSkills.map(() => '?').join(',')})`
+              ).all(...allSkills)
+            : [];
+
+        if (validSkills.length !== allSkills.length) {
+            return res.status(400).json({
+                status: 'error',
+                message: 'One or more selected skills are invalid.'
+            });
+        }
+
+        const saveProfile = db.transaction(() => {
+            db.prepare(`
+                INSERT INTO user_profiles
+                    (user_id, department, year_of_study)
+                VALUES (?, ?, ?)
+            `).run(userId, department.trim(), yearOfStudy.trim());
+
+            const insertSkill = db.prepare(`
+                INSERT INTO user_skills (user_id, skill_id, skill_type)
+                VALUES (?, ?, ?)
+            `);
+
+            for (const skillId of new Set(offeringSkills)) {
+                insertSkill.run(userId, skillId, 'offering');
+            }
+
+            for (const skillId of new Set(seekingSkills)) {
+                insertSkill.run(userId, skillId, 'seeking');
+            }
+        });
+
+        saveProfile();
+
+        return res.json({
+            status: 'success',
+            message: 'Profile completed successfully.'
+        });
+    } catch (error) {
+        console.error('Complete profile error:', error);
+        return res.status(500).json({
+            status: 'error',
+            message: 'Could not save your profile.'
         });
     }
 });

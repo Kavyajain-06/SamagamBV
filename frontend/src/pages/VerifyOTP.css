@@ -1,0 +1,83 @@
+
+.verify-page {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: #f3f5ff;
+  color: #171923;
+  font-family: 'Space Grotesk', sans-serif;
+}
+
+.verify-card {
+  width: 100%;
+  max-width: 440px;
+  padding: 36px;
+  background: #ffffff;
+  border: 2px solid #171923;
+  border-radius: 18px;
+  box-shadow: 7px 7px 0 #171923;
+}
+
+.verify-card h1 {
+  margin: 0 0 12px;
+  font-size: 30px;
+  font-weight: 700;
+}
+
+.verify-card > p {
+  color: #606575;
+  line-height: 1.6;
+}
+
+.verify-card form {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  margin-top: 28px;
+}
+
+.verify-card label {
+  font-size: 14px;
+  font-weight: 700;
+}
+
+.verify-card input {
+  width: 100%;
+  padding: 14px;
+  border: 2px solid #171923;
+  border-radius: 8px;
+  background: #fff;
+  font: inherit;
+  box-sizing: border-box;
+}
+
+.verify-card input:focus {
+  outline: 3px solid #b8f36b;
+  outline-offset: 2px;
+}
+
+.verify-card button {
+  margin-top: 12px;
+  padding: 15px;
+  border: 2px solid #171923;
+  border-radius: 8px;
+  background: #b8f36b;
+  color: #171923;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+
+.verify-card button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.verify-message {
+  margin: 4px 0;
+  color: #2457d6;
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
