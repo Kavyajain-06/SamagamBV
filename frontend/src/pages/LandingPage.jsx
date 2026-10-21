@@ -60,7 +60,7 @@ function Brand() {
           Samagam <span>BV</span>
         </div>
         <div className="brand-tagline">
-          COLLABORATIVE DIGITAL ECOSYSTEM
+         
         </div>
       </div>
     </a>

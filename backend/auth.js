@@ -604,10 +604,38 @@ router.post('/profile/complete', authenticateToken, (req, res) => {
 
         saveProfile();
 
-        return res.json({
-            status: 'success',
-            message: 'Profile completed successfully.'
-        });
+        
+saveProfile();
+
+// Issue a regular authentication token after profile completion.
+const user = db.prepare(`
+    SELECT id, name, college_email, role
+    FROM users
+    WHERE id = ?
+`).get(userId);
+
+const token = jwt.sign(
+    {
+        id: user.id,
+        email: user.college_email,
+        role: user.role
+    },
+    process.env.JWT_SECRET,
+    { expiresIn: '1h' }
+);
+
+return res.json({
+    status: 'success',
+    message: 'Profile completed successfully.',
+    token,
+    user: {
+        id: user.id,
+        name: user.name,
+        email: user.college_email,
+        role: user.role
+    }
+});
+
     } catch (error) {
         console.error('Complete profile error:', error);
         return res.status(500).json({

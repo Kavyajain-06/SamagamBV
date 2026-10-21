@@ -109,13 +109,25 @@ function CompleteProfile() {
         throw new Error(data.message || 'Could not save your profile.')
       }
 
-      sessionStorage.removeItem('profileToken')
-      sessionStorage.removeItem('signupEmail')
-      sessionStorage.removeItem('signupName')
-      sessionStorage.setItem('profileCompleted', 'true')
+      
+if (!data.token || !data.user) {
+  throw new Error(
+    'Profile saved, but we could not start your session. Please contact support.'
+  )
+}
 
-      navigate('/signup-success')
-    } catch (err) {
+sessionStorage.setItem('authToken', data.token)
+sessionStorage.setItem('userName', data.user.name)
+sessionStorage.setItem('userEmail', data.user.email)
+
+sessionStorage.removeItem('profileToken')
+sessionStorage.removeItem('signupEmail')
+sessionStorage.removeItem('signupName')
+
+sessionStorage.setItem('profileCompleted', 'true')
+
+navigate('/dashboard', { replace: true })
+}catch (err) {
       setError(err.message || 'Something went wrong. Please try again.')
     } finally {
       setSaving(false)
